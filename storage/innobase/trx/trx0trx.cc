@@ -2281,14 +2281,14 @@ dberr_t trx_commit_for_mysql(trx_t *trx) /*!< in/out: transaction */
     case TRX_STATE_PREPARED:
       trx->op_info = "committing";
 
-      /* For GTID persistence we need update undo segment. */
+      /* TODO : UNDO For GTID persistence we need update undo segment.
       db_err = trx_undo_gtid_add_update_undo(trx, false, false);
       if (db_err != DB_SUCCESS) {
         return (db_err);
       }
 
-      /* Flush prepare GTID for XA prepared transactions. */
-      trx_undo_gtid_flush_prepare(trx);
+      /* Flush prepare GTID for XA prepared transactions.
+      trx_undo_gtid_flush_prepare(trx);*/
 
       if (trx->id != 0) {
         trx_update_mod_tables_timestamp(trx);
@@ -2752,11 +2752,11 @@ dberr_t trx_prepare_for_mysql(trx_t *trx) {
     return (DB_FORCED_ABORT);
   }
 
-  /* For GTID persistence we need update undo segment. */
+  /* TODO : UNDO For GTID persistence we need update undo segment.
   auto db_err = trx_undo_gtid_add_update_undo(trx, true, false);
   if (db_err != DB_SUCCESS) {
     return (db_err);
-  }
+  } */
 
   trx->op_info = "preparing";
 

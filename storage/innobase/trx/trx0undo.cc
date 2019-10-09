@@ -1622,7 +1622,6 @@ dberr_t trx_undo_assign_undo(
           :
 #endif
           trx_undo_reuse_cached(trx, rseg, type, trx->id, trx->xid, &mtr);
-
   if (undo == nullptr) {
     err = trx_undo_create(trx, rseg, type, trx->id, trx->xid, &undo, &mtr);
     if (err != DB_SUCCESS) {

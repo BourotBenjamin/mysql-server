@@ -2140,6 +2140,9 @@ dberr_t trx_undo_report_row_operation(
                                  0 if BTR_NO_UNDO_LOG
                                  flag was specified */
 {
+    //TODO UNDO
+    roll_ptr = nullptr;
+    return DB_SUCCESS;
   trx_t *trx;
   trx_undo_t *undo;
   page_no_t page_no;
@@ -2455,6 +2458,9 @@ bool trx_undo_prev_version_build(
     const dict_index_t *const index, ulint *offsets, mem_heap_t *heap,
     rec_t **old_vers, mem_heap_t *v_heap, const dtuple_t **vrow, ulint v_status,
     lob::undo_vers_t *lob_undo) {
+
+    DBUG_RETURN(true);
+    /** TODO UNDO
   DBUG_ENTER("trx_undo_prev_version_build");
 
   trx_undo_rec_t *undo_rec = NULL;
@@ -2483,14 +2489,14 @@ bool trx_undo_prev_version_build(
   *old_vers = NULL;
 
   if (trx_undo_roll_ptr_is_insert(roll_ptr)) {
-    /* The record rec is the first inserted version */
+    /* The record rec is the first inserted version
     DBUG_RETURN(true);
   }
 
   rec_trx_id = row_get_rec_trx_id(rec, index, offsets);
 
   /* REDO rollback segments are used only for non-temporary objects.
-  For temporary objects NON-REDO rollback segments are used. */
+  For temporary objects NON-REDO rollback segments are used.
   bool is_temp = index->table->is_temporary();
 
   ut_ad(!index->table->skip_alter_undo);
@@ -2498,11 +2504,11 @@ bool trx_undo_prev_version_build(
   if (trx_undo_get_undo_rec(roll_ptr, rec_trx_id, heap, is_temp,
                             index->table->name, &undo_rec)) {
     if (v_status & TRX_UNDO_PREV_IN_PURGE) {
-      /* We are fetching the record being purged */
+      /* We are fetching the record being purged
       undo_rec = trx_undo_get_undo_rec_low(roll_ptr, heap, is_temp);
     } else {
       /* The undo record may already have been purged,
-      during purge or semi-consistent read. */
+      during purge or semi-consistent read.
       DBUG_RETURN(false);
     }
   }
@@ -2514,7 +2520,7 @@ bool trx_undo_prev_version_build(
   if (table_id != index->table->id) {
     /* The table should have been rebuilt, but purge has
     not yet removed the undo log records for the
-    now-dropped old table (table_id). */
+    now-dropped old table (table_id).
     DBUG_RETURN(true);
   }
 
@@ -2540,7 +2546,7 @@ bool trx_undo_prev_version_build(
   transaction undo log that are at least as long as the longest
   possible column prefix in a secondary index.  Thus, secondary
   index entries for *old_vers can be constructed without
-  dereferencing any BLOB pointers. */
+  dereferencing any BLOB pointers.
 
   ptr = trx_undo_rec_skip_row_ref(ptr, index);
 
@@ -2562,11 +2568,11 @@ bool trx_undo_prev_version_build(
     after trx_id was committed, provided that no view was started
     before trx_id. If the purge view can see the committed
     delete-marked record by trx_id, no transactions need to access
-    the BLOB. */
+    the BLOB.
 
     /* the row_upd_changes_disowned_external(update) call could be
     omitted, but the synchronization on purge_sys->latch is likely
-    more expensive. */
+    more expensive.
 
     if ((update->info_bits & REC_INFO_DELETED_FLAG) &&
         row_upd_changes_disowned_external(update)) {
@@ -2581,7 +2587,7 @@ bool trx_undo_prev_version_build(
 
       if (missing_extern) {
         /* treat as a fresh insert, not to
-        cause assertion error at the caller. */
+        cause assertion error at the caller.
         DBUG_RETURN(true);
       }
     }
@@ -2590,13 +2596,13 @@ bool trx_undo_prev_version_build(
     old version of the record: the extern bits in rec for those
     fields that update does NOT update, as well as the bits for
     those fields that update updates to become externally stored
-    fields. Store the info: */
+    fields. Store the info:
 
     entry = row_rec_to_index_entry(rec, index, offsets, &n_ext, heap);
     n_ext += lob::btr_push_update_extern_fields(entry, update, heap);
     /* The page containing the clustered index record
     corresponding to entry is latched in mtr.  Thus the
-    following call is safe. */
+    following call is safe.
     row_upd_index_replace_new_col_vals(entry, index, update, heap);
 
     buf = static_cast<byte *>(
@@ -2612,7 +2618,7 @@ bool trx_undo_prev_version_build(
   }
 
   /* Set the old value (which is the after image of an update) in the
-  update vector to dtuple vrow */
+  update vector to dtuple vrow
   if (v_status & TRX_UNDO_GET_OLD_V_VALUE) {
     row_upd_replace_vcol((dtuple_t *)*vrow, index->table, update, false, NULL,
                          NULL);
@@ -2639,7 +2645,7 @@ bool trx_undo_prev_version_build(
   still NULL after the call, (and old_vers is not NULL) it must be because the
   UPD_NODE_NO_ORD_CHANGE flag was set for this version.
   This last statement is an important assumption made by the
-  row_vers_impl_x_locked_low() function. */
+  row_vers_impl_x_locked_low() function.
   if (vrow && !(cmpl_info & UPD_NODE_NO_ORD_CHANGE)) {
     if (!(*vrow)) {
       *vrow = dtuple_create_with_vcol(v_heap ? v_heap : heap,
@@ -2658,7 +2664,7 @@ bool trx_undo_prev_version_build(
     update->reset();
   }
 
-  DBUG_RETURN(true);
+  DBUG_RETURN(true);*/
 }
 
 /** Read virtual column value from undo log
@@ -2672,6 +2678,7 @@ bool trx_undo_prev_version_build(
 void trx_undo_read_v_cols(const dict_table_t *table, const byte *ptr,
                           const dtuple_t *row, bool in_purge, bool online,
                           const ulint *col_map, mem_heap_t *heap) {
+    return; // TODO UNDO
   const byte *end_ptr;
   bool first_v_col = true;
   bool is_undo_log = true;

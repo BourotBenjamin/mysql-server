@@ -263,15 +263,16 @@ static dberr_t trx_rollback_low(trx_t *trx) {
  @return error code or DB_SUCCESS */
 dberr_t trx_rollback_for_mysql(trx_t *trx) /*!< in/out: transaction */
 {
-  /* Avoid the tracking of async rollback killer
-  thread to enter into InnoDB. */
+    return DB_SUCCESS;
+  /* TODO UNDO Avoid the tracking of async rollback killer
+  thread to enter into InnoDB.
   if (TrxInInnoDB::is_async_rollback(trx)) {
     return (trx_rollback_low(trx));
 
   } else {
     TrxInInnoDB trx_in_innodb(trx, true);
     return (trx_rollback_low(trx));
-  }
+  } */
 }
 
 /** Rollback the latest SQL statement for MySQL.

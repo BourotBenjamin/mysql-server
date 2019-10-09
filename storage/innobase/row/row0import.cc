@@ -3464,10 +3464,11 @@ dberr_t row_import_for_mysql(dict_table_t *table, dd::Table *table_def,
   /* Assign an undo segment for the transaction, so that the
   transaction will be recovered after a crash. */
 
-  mutex_enter(&trx->undo_mutex);
+  /* TODO UNDO
+   * mutex_enter(&trx->undo_mutex);
 
   /* IMPORT tablespace is blocked for temp-tables and so we don't
-  need to assign temporary rollback segment for this trx. */
+  need to assign temporary rollback segment for this trx.
   err = trx_undo_assign_undo(trx, &trx->rsegs.m_redo, TRX_UNDO_UPDATE);
 
   mutex_exit(&trx->undo_mutex);
@@ -3481,7 +3482,7 @@ dberr_t row_import_for_mysql(dict_table_t *table, dd::Table *table_def,
   } else if (trx->rsegs.m_redo.update_undo == 0) {
     err = DB_TOO_MANY_CONCURRENT_TRXS;
     return (row_import_cleanup(prebuilt, trx, err));
-  }
+  }*/
 
   prebuilt->trx->op_info = "read meta-data file";
 

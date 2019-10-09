@@ -98,7 +98,7 @@ static constexpr int o11x_version(TlsVersion version) {
       return TLS1_3_VERSION;
 #endif
     default:
-      throw std::invalid_argument("version out of range");
+        return 0;
   }
 }
 #endif

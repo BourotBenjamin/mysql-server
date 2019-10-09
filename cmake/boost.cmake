@@ -109,6 +109,7 @@ MACRO(COULD_NOT_FIND_BOOST)
     "export https_proxy=http://example.com:80\n"
     )
 ENDMACRO()
+SET(WITH_BOOST "/var/boost_1_69_0")
 
 # Pick value from environment if not set on command line.
 IF(DEFINED ENV{WITH_BOOST} AND NOT DEFINED WITH_BOOST)
@@ -191,7 +192,7 @@ ENDIF()
 
 # There is a similar option in unittest/gunit.
 # But the boost tarball is much bigger, so we have a separate option.
-OPTION(DOWNLOAD_BOOST "Download boost from sourceforge." OFF)
+OPTION(DOWNLOAD_BOOST "Download boost from sourceforge." ON)
 SET(DOWNLOAD_BOOST_TIMEOUT 600 CACHE STRING
   "Timeout in seconds when downloading boost.")
 
