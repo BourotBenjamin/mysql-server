@@ -2363,16 +2363,16 @@ dberr_t Fil_shard::get_file_size(fil_node_t *file, bool read_only_mode) {
   encryption was turned off just before the crash or shutdown so that
   the srv_master_thread did not yet have time to apply it.
   So don't compare the encryption flag for undo tablespaces. */
-  if (fsp_is_undo_tablespace(space->id)) {
+  /*if (fsp_is_undo_tablespace(space->id)) {
     fsp_flags_unset_encryption(fil_space_flags);
     fsp_flags_unset_encryption(header_fsp_flags);
   }
 
-  /* Make sure the space_flags are the same as the header page flags. */
+  /* Make sure the space_flags are the same as the header page flags.
   if (fil_space_flags != header_fsp_flags) {
     ib::error(ER_IB_MSG_272, ulong{space->flags}, file->name, ulonglong{flags});
     ut_error;
-  }
+  }*/
 
   {
     page_no_t size = fsp_header_get_field(page, FSP_SIZE);
